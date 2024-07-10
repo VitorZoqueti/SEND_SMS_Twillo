@@ -1,0 +1,45 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar SMS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Enviar SMS</h1>
+    <form id="smsForm">
+        <label for="message">Mensagem:</label>
+        <input type="text" id="message" name="message" required><br><br>
+        <button type="submit">Enviar SMS</button>
+    </form>
+
+    <script>
+        document.getElementById('smsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const message = document.getElementById('message').value;
+            const body = JSON.stringify({ body: message, to: 'NUMERO_CELL_RECEBEDOR_SMS' });
+
+            fetch('http://localhost:3000/send-sms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Resposta do servidor:', data);
+                alert('SMS enviado com sucesso!');
+            })
+            .catch(error => {
+                console.error('Erro ao enviar SMS:', error);
+                alert('Erro ao enviar SMS. Verifique o console para mais detalhes.');
+            });
+        });
+    </script>
+</body>
+</html>
